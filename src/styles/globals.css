@@ -1,0 +1,362 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Design tokens (Part A1). Colour rule: 60% white / 30% soft pink / 10% strong pink.
+   White text is ONLY allowed on --brand-deep and --charcoal (white on --brand-strong is 2.65:1). */
+:root {
+  --brand-strong: #ff69b4;
+  --brand-soft: #ffb3de;
+  --brand-tint-1: #ffecf7;
+  --brand-tint-2: #fff6fb;
+  --brand-logo: #fa5088;
+  --brand-deep: #d6336c;
+  --ink: #1e1a19;
+  --charcoal: #5a5352;
+  --surface: #ffffff;
+  --surface-warm: #fffaf7;
+  --line: #f2e2eb; /* hairline borders on cards, inputs and dividers */
+
+  --stage-radius: 16px;
+
+  --header-utility: 56px;
+  --header-main: 56px;
+  --header-main-desktop: 76px;
+  /* Total fixed-header height: mobile = main row only; desktop = both tiers */
+  --header-h: var(--header-main);
+  --hero-bottom-overlap: 56px; /* spare space for the future booking bar */
+  --site-gutter: clamp(
+    20px,
+    6vw,
+    120px
+  ); /* left/right margin shared by header + every page section */
+  --site-max: 1536px;
+
+  /* Header foreground over the transparent state. Flip to #fff if a dark hero image needs it. */
+  --header-fg: var(--ink);
+}
+
+@media (min-width: 1360px) {
+  :root {
+    --header-main: var(--header-main-desktop);
+    --header-h: var(--header-main-desktop);
+  }
+}
+
+@utility site-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--site-max);
+  padding-inline: var(--site-gutter);
+}
+
+@utility site-box {
+  margin-inline: auto;
+  width: min(
+    calc(100% - 2 * var(--site-gutter)),
+    calc(var(--site-max) - 2 * var(--site-gutter))
+  );
+}
+
+/* Content column for the lower home sections: shared gutters, capped at 1180px */
+@utility section-inner {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1180px;
+}
+
+/* Swipe rows: hide the scrollbar but keep the scrolling */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Section rhythm and the one soft pink shadow */
+@utility section-y {
+  padding-block: clamp(36px, 5vw, 64px);
+}
+@utility shadow-soft-pink {
+  box-shadow: 0 24px 48px -34px rgba(214, 51, 108, 0.55);
+}
+
+/* Section headings */
+@utility section-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+@utility section-support {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 48ch;
+  color: var(--charcoal);
+  text-wrap: balance;
+}
+
+/* One shared hero type scale, used by every slide */
+@utility hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+@utility hero-sub {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.5;
+  max-width: 46ch;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+@theme inline {
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-nunito), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-tint-1: var(--brand-tint-1);
+  --color-brand-tint-2: var(--brand-tint-2);
+  --color-brand-logo: var(--brand-logo);
+  --color-brand-deep: var(--brand-deep);
+  --color-ink: var(--ink);
+  --color-charcoal: var(--charcoal);
+  --color-surface: var(--surface);
+  --color-surface-warm: var(--surface-warm);
+  --color-line: var(--line);
+
+  /* Radii: 8 / 12 / 20 and the 16px stage radius */
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-stage: var(--stage-radius);
+}
+
+@layer base {
+  html {
+    scroll-behavior: auto;
+  }
+  body {
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Focus ring: 2px ink, 2px offset, white halo filling the offset gap */
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #fff;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Animations */
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dropdown-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes sheet-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes sheet-out-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.dropdown-panel[data-state="open"] {
+  animation: dropdown-in 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.dropdown-panel[data-state="closed"] {
+  animation: dropdown-out 120ms ease-out both;
+}
+.sheet-content[data-state="open"] {
+  animation: sheet-in-right 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.sheet-content[data-state="closed"] {
+  animation: sheet-out-right 200ms ease-in both;
+}
+.sheet-overlay[data-state="open"] {
+  animation: fade-in 200ms ease-out both;
+}
+.sheet-overlay[data-state="closed"] {
+  animation: fade-out 150ms ease-in both;
+}
+
+/* ------------------------------------------------------------------ */
+/* Section reveal: bottom-to-top, blur to sharp (same language as the hero) */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(8px);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal[data-in="true"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Reviews marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 768px) {
+  .marquee-track {
+    animation: marquee 70s linear infinite;
+    will-change: transform;
+  }
+  .marquee-track[data-paused="true"],
+  .marquee-viewport:hover .marquee-track,
+  .marquee-viewport:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+  .marquee-viewport {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
+}
+
+/* FAQ answer reveal (native <details>) */
+@keyframes faq-answer-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+details[open] > .faq-answer {
+  animation: faq-answer-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero initial states (the orchestrator in hero-slider.tsx takes over from here) */
+.hero-init-hidden {
+  opacity: 0;
+}
+.hero-panel-init {
+  transform: translateY(100%);
+}
+.hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropdown-panel[data-state="open"] {
+    animation-name: fade-in;
+    animation-duration: 120ms;
+  }
+  .dropdown-panel[data-state="closed"] {
+    animation-name: fade-out;
+    animation-duration: 80ms;
+  }
+  .sheet-content[data-state="open"] {
+    animation-name: fade-in;
+    animation-duration: 150ms;
+  }
+  .sheet-content[data-state="closed"] {
+    animation-name: fade-out;
+    animation-duration: 100ms;
+  }
+  .hero-float {
+    animation: none;
+  }
+  .hero-panel-init {
+    transform: none;
+    opacity: 0;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+  details[open] > .faq-answer {
+    animation: none;
+  }
+}
